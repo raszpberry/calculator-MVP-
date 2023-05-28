@@ -12,6 +12,8 @@ namespace Calculator_MVP
         ICalcView _iCalcView = null;
         bool bClearDigit { get; set; }
         bool bDelIsPressed { get; set; }
+        private double previousResult = 0;
+
 
         public CalcPresenter(ICalcView iCalcView)
         {
@@ -86,11 +88,11 @@ namespace Calculator_MVP
 
                 if (lstInputStr.Count == 3)
                 {
-                    CalculatorServices calcServ = new CalculatorServices();
-                    _iCalcView.TextDisplay = "";
-                    _iCalcView.TextInput = calcServ.Calculate(lstInputStr).ToString();
-
-                    bClearDigit = true;
+                   CalculatorServices calcServ = new CalculatorServices();
+                   _iCalcView.TextDisplay = $"{lstInputStr[0]} {lstInputStr[1]}";
+                   _iCalcView.TextInput = calcServ.Calculate(lstInputStr).ToString();
+                   
+                   bClearDigit = true;
                 }
 
                 _iCalcView.AutoAdjustFontSizeInc();
@@ -102,6 +104,7 @@ namespace Calculator_MVP
                 string initialValue = _iCalcView.TextInput;
                 string removeStr = initialValue.Remove(initialValue.Length - 1, 1);
                 _iCalcView.TextInput = (removeStr == "") ? "0" : removeStr;
+                _iCalcView.TextDisplay = "";
                 _iCalcView.AutoAdjustFontSizeDec();
             }
 
@@ -125,16 +128,18 @@ namespace Calculator_MVP
         private void Calculate(object sender, EventArgs e)
         {
             CalcModel calcModdata = _iCalcView.GetCalcData();
-            List<string> lstInputStr = null;
-
-            _iCalcView.SetTextBoxFocus();
-            lstInputStr = ModifiedInputString(calcModdata.InputString);
+            List<string> lstInputStr = ModifiedInputString(calcModdata.InputString);
 
             if (lstInputStr.Count == 3)
             {
                 CalculatorServices calcServ = new CalculatorServices();
-                _iCalcView.TextDisplay = "";
-                _iCalcView.TextInput = calcServ.Calculate(lstInputStr).ToString();
+                double result = calcServ.Calculate(lstInputStr);
+
+                _iCalcView.TextDisplay = $"{lstInputStr[0]} {lstInputStr[1]}";
+                _iCalcView.TextInput = result.ToString();
+
+                previousResult = result; // Update the previous result
+
                 bClearDigit = true;
             }
         }

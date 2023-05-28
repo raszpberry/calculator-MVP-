@@ -17,8 +17,11 @@ namespace Calculator_MVP
         event KeyPressEventHandler NumPressed;
         event KeyEventHandler DeletePressed;
 
+        //Keeps the focus to textbox and places the textbox cursor to the end
         void SetTextBoxFocus();
         void ScrollTextBoxToEnd();
+
+        //Handling font size change when the text input length exceeds textbox width
         void AutoAdjustFontSizeInc();
         void AutoAdjustFontSizeDec();
     }

@@ -9,7 +9,6 @@ namespace Calculator_MVP
 {
     class CalculatorServices
     {
-
         public double Calculate(List<string> lstDisplay)
         {
             double retAns = 0;
